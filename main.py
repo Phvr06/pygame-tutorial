@@ -17,12 +17,11 @@ pygame.display.set_caption('JOGO DO DINOSSAURO FAKE')
 # Clock para definir o framerate do jogo
 clock = pygame.time.Clock()
 
-# Superfície para testar
 # Superfícies são os elementos visuais que serão mostrados na tela
-superficie_teste = pygame.Surface((100, 200))
-
-# Adiciona a cor vermelha à essa superfície teste 
-superficie_teste.fill('Red')
+# Superfície de céu para o fundo
+superficie_sky = pygame.image.load('graphics/Sky.png')
+# Superfície de chão para o fundo
+superficie_ground = pygame.image.load('graphics/ground.png')
 
 while True:
     # Loop para pegar os possíveis inputs do jogador
@@ -32,8 +31,9 @@ while True:
             pygame.quit()
             exit()
 
-    # Mostra na tela a superfície teste criada
-    tela.blit(superficie_teste, (200, 100))
+    # Mostra na tela as superfícies do céu e do chão
+    tela.blit(superficie_sky, (0, 0))
+    tela.blit(superficie_ground, (0, 300))
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
