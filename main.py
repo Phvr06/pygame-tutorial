@@ -26,4 +26,6 @@ while True:
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
+
+    # Define o framerate máximo em 60 fps
     clock.tick(60)
