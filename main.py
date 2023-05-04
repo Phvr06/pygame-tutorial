@@ -17,11 +17,16 @@ pygame.display.set_caption('JOGO DO DINOSSAURO FAKE')
 # Clock para definir o framerate do jogo
 clock = pygame.time.Clock()
 
+# Define uma fonte para ser utilizada ao escrever textos que vão ser exibidos no jogo como uma superfície
+fonte = pygame.font.Font('font/Pixeltype.ttf', 50)
+
 # Superfícies são os elementos visuais que serão mostrados na tela
 # Superfície de céu para o fundo
 superficie_sky = pygame.image.load('graphics/Sky.png')
 # Superfície de chão para o fundo
 superficie_ground = pygame.image.load('graphics/ground.png')
+# Superfície do texto
+superficie_texto = fonte.render("Dinossaurinho :(", False, 'Black')
 
 while True:
     # Loop para pegar os possíveis inputs do jogador
@@ -31,9 +36,10 @@ while True:
             pygame.quit()
             exit()
 
-    # Mostra na tela as superfícies do céu e do chão
+    # Mostra na tela as superfícies do céu e do chão e do texto
     tela.blit(superficie_sky, (0, 0))
     tela.blit(superficie_ground, (0, 300))
+    tela.blit(superficie_texto, (300, 50))
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
