@@ -22,13 +22,13 @@ fonte = pygame.font.Font('font/Pixeltype.ttf', 50)
 
 # Superfícies são os elementos visuais que serão mostrados na tela
 # Superfície de céu para o fundo
-superficie_sky = pygame.image.load('graphics/Sky.png')
+superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 # Superfície de chão para o fundo
-superficie_ground = pygame.image.load('graphics/ground.png')
+superficie_ground = pygame.image.load('graphics/ground.png').convert()
 # Superfície do texto
 superficie_texto = fonte.render("Dinossaurinho :(", False, 'Black')
 # Superfície do inimigo
-superficie_lesma = pygame.image.load('graphics/snail/snail1.png')
+superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 lesma_x_pos = 600
 
 while True:
