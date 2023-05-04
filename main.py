@@ -11,6 +11,12 @@ pygame.init()
 # Gera a tela na qual o jogo será jogado. Recebe como argumento um tuple que consiste da largura e da altura
 tela = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# Muda o nome da janela do jogo
+pygame.display.set_caption('JOGO DO DINOSSAURO FAKE')
+
+# Clock para definir o framerate do jogo
+clock = pygame.time.Clock()
+
 while True:
     # Loop para pegar os possíveis inputs do jogador
     for evento in pygame.event.get():
@@ -20,3 +26,4 @@ while True:
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
+    clock.tick(60)
