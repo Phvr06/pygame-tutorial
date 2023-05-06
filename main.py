@@ -21,6 +21,7 @@ clock = pygame.time.Clock()
 fonte = pygame.font.Font('font/Pixeltype.ttf', 50)
 
 # Superfícies são os elementos visuais que serão mostrados na tela
+# Retângulos são elementos utilizados para posicionar melhor superfícies
 # Superfície de céu para o fundo
 superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 # Superfície de chão para o fundo
@@ -30,6 +31,10 @@ superficie_texto = fonte.render("Dinossaurinho :(", False, 'Black')
 # Superfície do inimigo
 superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 lesma_x_pos = 600
+# Superfície do jogador
+superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
+# Retângulo do jogador
+retangulo_player = superficie_player.get_rect(midbottom = (80, 300))
 
 while True:
     # Loop para pegar os possíveis inputs do jogador
@@ -51,6 +56,8 @@ while True:
         lesma_x_pos = 800
     # Mostra na tela a superfície da lesma
     tela.blit(superficie_lesma, (lesma_x_pos, 250))
+    # Mostra na tela a superfície do jogador
+    tela.blit(superficie_player, retangulo_player)
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
