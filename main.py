@@ -27,10 +27,11 @@ superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 # Superfície de chão para o fundo
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
 # Superfície do texto
-superficie_texto = fonte.render("Dinossaurinho :(", False, 'Black')
+superficie_texto = fonte.render("Alien :)", False, 'Black')
 # Superfície do inimigo
 superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-lesma_x_pos = 600
+# Retângulo lesma
+retangulo_lesma = superficie_lesma.get_rect(midbottom = (600, 300))
 # Superfície do jogador
 superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
 # Retângulo do jogador
@@ -49,13 +50,13 @@ while True:
     tela.blit(superficie_ground, (0, 300))
     tela.blit(superficie_texto, (300, 50))
     # If/else para voltar a lesma para a tela quando ela sair dela
-    if lesma_x_pos >= -100:
+    if retangulo_lesma.right > 0:
         # Mexe a lesma 4 pixel para a esquerda
-        lesma_x_pos -= 4
+        retangulo_lesma.x -= 4
     else:
-        lesma_x_pos = 800
+        retangulo_lesma.left = 800
     # Mostra na tela a superfície da lesma
-    tela.blit(superficie_lesma, (lesma_x_pos, 250))
+    tela.blit(superficie_lesma, retangulo_lesma)
     # Mostra na tela a superfície do jogador
     tela.blit(superficie_player, retangulo_player)
 
