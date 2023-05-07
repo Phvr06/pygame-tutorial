@@ -27,7 +27,7 @@ superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 # Superfície de chão para o fundo
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
 # Superfície do texto
-superficie_texto = fonte.render("Alien :)", False, 'Black')
+superficie_texto = fonte.render("Alien :)", False, (64,64,64))
 # Retângulo do texto
 retangulo_texto = superficie_texto.get_rect(center = (400, 50))
 # Superfície do inimigo
@@ -53,8 +53,8 @@ while True:
     # Mostra na tela as superfícies do céu e do chão e do texto
     tela.blit(superficie_sky, (0, 0))
     tela.blit(superficie_ground, (0, 300))
-    pygame.draw.rect(tela, 'Pink', retangulo_texto)
-    pygame.draw.rect(tela, 'Pink', retangulo_texto, 10)
+    pygame.draw.rect(tela, "#c0e8ec", retangulo_texto)
+    pygame.draw.rect(tela, "#c0e8ec", retangulo_texto, 10)
     tela.blit(superficie_texto, retangulo_texto)
     # If/else para voltar a lesma para a tela quando ela sair dela
     if retangulo_lesma.right > 0:
