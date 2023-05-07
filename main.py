@@ -28,6 +28,8 @@ superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
 # Superfície do texto
 superficie_texto = fonte.render("Alien :)", False, 'Black')
+# Retângulo do texto
+retangulo_texto = superficie_texto.get_rect(center = (400, 50))
 # Superfície do inimigo
 superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
 # Retângulo lesma
@@ -44,11 +46,14 @@ while True:
             print("\nNão me deixe sozinho :(\n")
             pygame.quit()
             exit()
+        # Colisão com o mouse
+        # if evento.type == pygame.MOUSEMOTION and retangulo_player.collidepoint(evento.pos):
+        #     print("Na mira!")            
 
     # Mostra na tela as superfícies do céu e do chão e do texto
     tela.blit(superficie_sky, (0, 0))
     tela.blit(superficie_ground, (0, 300))
-    tela.blit(superficie_texto, (300, 50))
+    tela.blit(superficie_texto, retangulo_texto)
     # If/else para voltar a lesma para a tela quando ela sair dela
     if retangulo_lesma.right > 0:
         # Mexe a lesma 4 pixel para a esquerda
@@ -59,6 +64,10 @@ while True:
     tela.blit(superficie_lesma, retangulo_lesma)
     # Mostra na tela a superfície do jogador
     tela.blit(superficie_player, retangulo_player)
+
+    # Verificar colisão entre o jogador e a lesma
+    # if retangulo_player.colliderect(retangulo_lesma):
+    #     print('Porra, o ET bilu morreu!')
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
