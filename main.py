@@ -38,6 +38,7 @@ retangulo_lesma = superficie_lesma.get_rect(midbottom = (600, 300))
 superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
 # Retângulo do jogador
 retangulo_player = superficie_player.get_rect(midbottom = (80, 300))
+gravidade = 0
 
 while True:
     # Loop para pegar os possíveis inputs do jogador
@@ -47,8 +48,11 @@ while True:
             pygame.quit()
             exit()
         # Colisão com o mouse
-        # if evento.type == pygame.MOUSEMOTION and retangulo_player.collidepoint(evento.pos):
-        #     print("Na mira!")            
+        if evento.type == pygame.MOUSEBUTTONDOWN and retangulo_player.collidepoint(evento.pos) and retangulo_player.bottom >= 300:
+            gravidade = -20
+        # Receber input do teclado
+        if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE and retangulo_player.bottom >= 300:
+            gravidade = -20
 
     # Mostra na tela as superfícies do céu e do chão e do texto
     tela.blit(superficie_sky, (0, 0))
@@ -64,12 +68,13 @@ while True:
         retangulo_lesma.left = 800
     # Mostra na tela a superfície da lesma
     tela.blit(superficie_lesma, retangulo_lesma)
+
+    gravidade += 1
+    retangulo_player.y += gravidade
+    if retangulo_player.bottom >= 300:
+        retangulo_player.bottom = 300
     # Mostra na tela a superfície do jogador
     tela.blit(superficie_player, retangulo_player)
-
-    # Verificar colisão entre o jogador e a lesma
-    # if retangulo_player.colliderect(retangulo_lesma):
-    #     print('Porra, o ET bilu morreu!')
 
     # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
