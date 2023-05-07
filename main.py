@@ -1,5 +1,4 @@
 import pygame
-# Import para poder parar a execução de todo o código caso o jogador feche o jogo
 from sys import exit
 
 def placar():
@@ -7,61 +6,43 @@ def placar():
     superficie_tempo = fonte.render(f'Pontos: {int((tempo-tempo_inicial)/1000)}',False,(64,64,64))
     retangulo_tempo = superficie_tempo.get_rect(center = (400,50))
     tela.blit(superficie_tempo,retangulo_tempo)
+    return int((tempo-tempo_inicial)/1000)
 
-WIDTH = 800 # pixels
-HEIGHT = 400 # pixel
+WIDTH = 800
+HEIGHT = 400
 
-# Inicia o pygame
 pygame.init()
-
-# Gera a tela na qual o jogo será jogado. Recebe como argumento um tuple que consiste da largura e da altura
 tela = pygame.display.set_mode((WIDTH, HEIGHT))
-
-# Muda o nome da janela do jogo
 pygame.display.set_caption('JOGO DO DINOSSAURO FAKE')
-
-# Clock para definir o framerate do jogo
 clock = pygame.time.Clock()
-
-# Define uma fonte para ser utilizada ao escrever textos que vão ser exibidos no jogo como uma superfície
 fonte = pygame.font.Font('font/Pixeltype.ttf', 50)
-
-# Variável de estado do jogo
-jogando = True
+jogando = False
 tempo_inicial = 0
-
-# Superfícies são os elementos visuais que serão mostrados na tela
-# Retângulos são elementos utilizados para posicionar melhor superfícies
-# Superfície de céu para o fundo
+tempo_jogo = 0
 superficie_sky = pygame.image.load('graphics/Sky.png').convert()
-# Superfície de chão para o fundo
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
-# # Superfície do texto
-# superficie_texto = fonte.render("Alien :)", False, (64,64,64))
-# # Retângulo do texto
-# retangulo_texto = superficie_texto.get_rect(center = (400, 50))
-# Superfície do inimigo
 superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-# Retângulo lesma
 retangulo_lesma = superficie_lesma.get_rect(midbottom = (600, 300))
-# Superfície do jogador
 superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
-# Retângulo do jogador
 retangulo_player = superficie_player.get_rect(midbottom = (80, 300))
+player_parado = pygame.image.load('graphics/Player/player_stand.png').convert_alpha()
+player_parado = pygame.transform.rotozoom(player_parado, 0, 2)
+retangulo_player_parado = player_parado.get_rect(center = (400,200))
+nome_jogo = fonte.render("JOGO DO DINOSSAURO FAKE", False, (111,196,169))
+nome_retangulo = nome_jogo.get_rect(center = (400, 75))
+comecar = fonte.render("Aperte ESPACO para iniciar o jogo", False, (111,196,169))
+comecar_retangulo = comecar.get_rect(center = (400, 330))
 gravidade = 0
 
 while True:
-    # Loop para pegar os possíveis inputs do jogador
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             print("\nNão me deixe sozinho :(\n")
             pygame.quit()
             exit()
         if jogando:
-            # Colisão com o mouse
             if evento.type == pygame.MOUSEBUTTONDOWN and retangulo_player.collidepoint(evento.pos) and retangulo_player.bottom >= 300:
                 gravidade = -20
-            # Receber input do teclado
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE and retangulo_player.bottom >= 300:
                 gravidade = -20
         else:
@@ -72,38 +53,35 @@ while True:
 
 
     if jogando:
-        # Mostra na tela as superfícies do céu e do chão e do texto
         tela.blit(superficie_sky, (0, 0))
         tela.blit(superficie_ground, (0, 300))
-        # pygame.draw.rect(tela, "#c0e8ec", retangulo_texto)
-        # pygame.draw.rect(tela, "#c0e8ec", retangulo_texto, 10)
-        # tela.blit(superficie_texto, retangulo_texto)
-        placar()
-        # If/else para voltar a lesma para a tela quando ela sair dela
+        tempo_jogo = placar()
         if retangulo_lesma.right > 0:
-            # Mexe a lesma 4 pixel para a esquerda
             retangulo_lesma.x -= 4
         else:
             retangulo_lesma.left = 800
-        # Mostra na tela a superfície da lesma
         tela.blit(superficie_lesma, retangulo_lesma)
 
         gravidade += 1
         retangulo_player.y += gravidade
         if retangulo_player.bottom >= 300:
             retangulo_player.bottom = 300
-        # Mostra na tela a superfície do jogador
         tela.blit(superficie_player, retangulo_player)
 
-        # Colisão da lesma com o player
         if retangulo_lesma.colliderect(retangulo_player):
             jogando = False
+
     else:
-        tela.fill('Yellow')
+        tela.fill((94,129,162))
+        tela.blit(player_parado, retangulo_player_parado)
+        tela.blit(comecar, comecar_retangulo)
+        if tempo_jogo == 0:
+            tela.blit(nome_jogo, nome_retangulo)
+        else:
+            tempo_jogo_texto = fonte.render(f'Seu tempo: {tempo_jogo}', False, (111,196,169))
+            tempo_jogo_retangulo = tempo_jogo_texto.get_rect(center = (400, 75))
+            tela.blit(tempo_jogo_texto, tempo_jogo_retangulo)
 
-
-    # Atualiza a tela que foi gerada anteriormente com novas informações que tenham ocorrido durante o loop
     pygame.display.update()
 
-    # Define o framerate máximo em 60 fps
     clock.tick(60)
