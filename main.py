@@ -53,6 +53,8 @@ while True:
     # Mostra na tela as superfícies do céu e do chão e do texto
     tela.blit(superficie_sky, (0, 0))
     tela.blit(superficie_ground, (0, 300))
+    pygame.draw.rect(tela, 'Pink', retangulo_texto)
+    pygame.draw.rect(tela, 'Pink', retangulo_texto, 10)
     tela.blit(superficie_texto, retangulo_texto)
     # If/else para voltar a lesma para a tela quando ela sair dela
     if retangulo_lesma.right > 0:
