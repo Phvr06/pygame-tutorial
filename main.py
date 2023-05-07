@@ -13,12 +13,22 @@ def movimento_obstaculo(obstaculo_lista):
     if obstaculo_lista:
         for obstaculo in obstaculo_lista:
             obstaculo.x -= 5
-
-            tela.blit(superficie_lesma,obstaculo)
+            
+            if obstaculo.bottom == 300:
+                tela.blit(superficie_lesma,obstaculo)
+            else:
+                tela.blit(superficie_mosca,obstaculo)
         
         obstaculo_lista = [obstaculo for obstaculo in obstaculo_lista if obstaculo.x > -100]
 
     return obstaculo_lista
+
+def colisoes(player, obstaculos):
+    if obstaculos:
+        for obstaculo in obstaculos:
+            if player.colliderect(obstaculo):
+                return False
+    return True
 
 WIDTH = 800
 HEIGHT = 400
@@ -34,7 +44,7 @@ tempo_jogo = 0
 superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
 superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-retangulo_lesma = superficie_lesma.get_rect(midbottom = (600, 300))
+superficie_mosca = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
 obstaculo_lista = []
 superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
 retangulo_player = superficie_player.get_rect(midbottom = (80, 300))
@@ -62,22 +72,19 @@ while True:
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE and retangulo_player.bottom >= 300:
                 gravidade = -20
             if evento.type == timer_obstaculo:
-                obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 300)))
+                if randint(0,2):
+                    obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 300)))
+                else:
+                    obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 200)))
         else:
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
                 jogando = True
-                retangulo_lesma.left = 800
                 tempo_inicial = pygame.time.get_ticks()
 
     if jogando:
         tela.blit(superficie_sky, (0, 0))
         tela.blit(superficie_ground, (0, 300))
         tempo_jogo = placar()
-        # if retangulo_lesma.right > 0:
-        #     retangulo_lesma.x -= 4
-        # else:
-        #     retangulo_lesma.left = 800
-        # tela.blit(superficie_lesma, retangulo_lesma)
 
         gravidade += 1
         retangulo_player.y += gravidade
@@ -87,13 +94,15 @@ while True:
 
         obstaculo_lista = movimento_obstaculo(obstaculo_lista)
 
-        if retangulo_lesma.colliderect(retangulo_player):
-            jogando = False
+        jogando = colisoes(retangulo_player, obstaculo_lista)
 
     else:
         tela.fill((94,129,162))
         tela.blit(player_parado, retangulo_player_parado)
         tela.blit(comecar, comecar_retangulo)
+        obstaculo_lista.clear()
+        retangulo_player.midbottom = (80, 300)
+        gravidade = 0
         if tempo_jogo == 0:
             tela.blit(nome_jogo, nome_retangulo)
         else:
