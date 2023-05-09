@@ -30,6 +30,16 @@ def colisoes(player, obstaculos):
                 return False
     return True
 
+def player_animation():
+    global superficie_player, player_index
+    if retangulo_player.bottom < 300:
+        superficie_player = player_jump
+    else:
+        player_index += 0.1
+        if player_index >= len(player_walk):
+            player_index = 0
+        superficie_player = player_walk[int(player_index)]
+
 WIDTH = 800
 HEIGHT = 400
 
@@ -43,10 +53,23 @@ tempo_inicial = 0
 tempo_jogo = 0
 superficie_sky = pygame.image.load('graphics/Sky.png').convert()
 superficie_ground = pygame.image.load('graphics/ground.png').convert()
-superficie_lesma = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-superficie_mosca = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+frame_lesma_1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
+frame_lesma_2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
+frames_lesma = [frame_lesma_1, frame_lesma_2]
+lesma_frame_index = 0
+superficie_lesma = frames_lesma[lesma_frame_index]
+frame_mosca_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+frame_mosca_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
+frames_mosca = [frame_mosca_1, frame_mosca_2]
+mosca_frame_index = 0
+superficie_mosca = frames_mosca[mosca_frame_index]
 obstaculo_lista = []
-superficie_player = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
+player_walk_1 = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
+player_walk_2 = pygame.image.load('graphics/Player/player_walk_2.png').convert_alpha()
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = pygame.image.load('graphics/Player/jump.png').convert_alpha()
+superficie_player = player_walk[player_index]
 retangulo_player = superficie_player.get_rect(midbottom = (80, 300))
 player_parado = pygame.image.load('graphics/Player/player_stand.png').convert_alpha()
 player_parado = pygame.transform.rotozoom(player_parado, 0, 2)
@@ -59,6 +82,12 @@ gravidade = 0
 
 timer_obstaculo = pygame.USEREVENT + 1
 pygame.time.set_timer(timer_obstaculo, 1500)
+
+animacao_lesma_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(animacao_lesma_timer, 500)
+
+animacao_mosca_timer = pygame.USEREVENT + 3
+pygame.time.set_timer(animacao_mosca_timer, 200)
 
 while True:
     for evento in pygame.event.get():
@@ -76,6 +105,18 @@ while True:
                     obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 300)))
                 else:
                     obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 200)))
+            if evento.type == animacao_lesma_timer:
+                if lesma_frame_index == 0:
+                    lesma_frame_index = 1
+                else:
+                    lesma_frame_index = 0
+                superficie_lesma = frames_lesma[lesma_frame_index]
+            if evento.type == animacao_mosca_timer:
+                if mosca_frame_index == 0:
+                    mosca_frame_index = 1
+                else:
+                    mosca_frame_index = 0
+                superficie_mosca = frames_mosca[mosca_frame_index]
         else:
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
                 jogando = True
@@ -90,6 +131,7 @@ while True:
         retangulo_player.y += gravidade
         if retangulo_player.bottom >= 300:
             retangulo_player.bottom = 300
+        player_animation()
         tela.blit(superficie_player, retangulo_player)
 
         obstaculo_lista = movimento_obstaculo(obstaculo_lista)
