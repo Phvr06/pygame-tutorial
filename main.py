@@ -31,7 +31,8 @@ class Player(pygame.sprite.Sprite):
             self.image = self.player_jump
         else:
             self.player_index += 0.1
-            if self.player_index >= len(self.player_walk):self.player_index = 0
+            if self.player_index > len(self.player_walk):
+                self.player_index = 0
             self.image = self.player_walk[int(player_index)]
     
     def update(self):
@@ -184,10 +185,6 @@ while True:
                 gravidade = -20
             if evento.type == timer_obstaculo:
                 obstacle_group.add(Obstacle(choice(['fly', 'snail', 'snail', 'snail'])))
-                # if randint(0,2):
-                #     obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 300)))
-                # else:
-                #     obstaculo_lista.append(superficie_lesma.get_rect(bottomright = (randint(900,1100), 200)))
             if evento.type == animacao_lesma_timer:
                 if lesma_frame_index == 0:
                     lesma_frame_index = 1
@@ -210,18 +207,10 @@ while True:
         tela.blit(superficie_ground, (0, 300))
         tempo_jogo = placar()
 
-        # gravidade += 1
-        # retangulo_player.y += gravidade
-        # if retangulo_player.bottom >= 300:
-        #     retangulo_player.bottom = 300
-        # player_animation()
-        # tela.blit(superficie_player, retangulo_player)
         player.draw(tela)
         player.update()
         obstacle_group.draw(tela)
         obstacle_group.update()
-
-        # obstaculo_lista = movimento_obstaculo(obstaculo_lista)
 
         jogando = collision_sprite()
 
