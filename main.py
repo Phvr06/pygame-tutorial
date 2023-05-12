@@ -14,17 +14,31 @@ class Player(pygame.sprite.Sprite):
         self.image = self.player_walk[self.player_index]
         self.rect = self.image.get_rect(midbottom = (80, 300))
         self.gravity = 0
+        self.frame_jump_counter = 0
+        self.jump_bool = False
     
+    def glide(self):
+        if self.jump_bool:
+            self.frame_jump_counter += 1
+
     def player_input(self):
-        keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
             self.gravity = -20
+            self.jump_bool = True
     
     def apply_gravity(self):
-        self.gravity += 1
+        # Gliding
+        if keys[pygame.K_SPACE] and self.frame_jump_counter > 20:
+            self.gravity = 2
+        # Falling
+        else: 
+            self.gravity += 1
         self.rect.y += self.gravity
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
+            self.jump_bool = False
+            self.frame_jump_counter = 0
+
     
     def animation_state(self):
         if self.rect.bottom < 300:
@@ -33,12 +47,13 @@ class Player(pygame.sprite.Sprite):
             self.player_index += 0.1
             if self.player_index > len(self.player_walk):
                 self.player_index = 0
-            self.image = self.player_walk[int(player_index)]
+            self.image = self.player_walk[int(self.player_index)]
     
     def update(self):
         self.player_input()
         self.apply_gravity()
         self.animation_state()
+        self.glide()
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -173,16 +188,13 @@ animacao_mosca_timer = pygame.USEREVENT + 3
 pygame.time.set_timer(animacao_mosca_timer, 200)
 
 while True:
+    keys = pygame.key.get_pressed()
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             print("\nNão me deixe sozinho :(\n")
             pygame.quit()
             exit()
         if jogando:
-            if evento.type == pygame.MOUSEBUTTONDOWN and retangulo_player.collidepoint(evento.pos) and retangulo_player.bottom >= 300:
-                gravidade = -20
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE and retangulo_player.bottom >= 300:
-                gravidade = -20
             if evento.type == timer_obstaculo:
                 obstacle_group.add(Obstacle(choice(['fly', 'snail', 'snail', 'snail'])))
             if evento.type == animacao_lesma_timer:
@@ -227,7 +239,6 @@ while True:
             tempo_jogo_texto = fonte.render(f'Seu tempo: {tempo_jogo}', False, (111,196,169))
             tempo_jogo_retangulo = tempo_jogo_texto.get_rect(center = (400, 75))
             tela.blit(tempo_jogo_texto, tempo_jogo_retangulo)
-
     pygame.display.update()
 
     clock.tick(60)
